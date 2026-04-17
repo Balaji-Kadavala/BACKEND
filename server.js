@@ -8,7 +8,7 @@ app.use(bodyParser.json());
 app.use(cookieParser())
 app.use(express.static(__dirname + "/public"));
 app.listen(4700,()=>{
-    console.log("Server is running on port 4700");
+    console.log("Server is running on port 4700 : http://localhost:4700");
 })
 app.get("/",(req,res)=>{
     res.sendFile(__dirname+"/public/home.html");
