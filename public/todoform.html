@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="/submit/todo" method="post">
+        <input type="text" id="title" name="title" placeholder="Enter todo title">
+        <button type="submit">Add Todo</button>
+    </form>
+    <ul id="todos">
+
+    </ul>
+    <script>
+        const fetchTodos=()=>{
+            fetch("/todos")
+            .then(res=>res.json())
+            .then(data=>{renderTodos(data)})
+        }
+        const renderTodos=(todos)=>{
+            var tdul=document.getElementById("todos")
+            var ntds="";
+            console.log(todos)
+            todos.forEach((todo)=>{
+                ntds+=`<li>
+                    ${todo.title}
+                    <button onclick="deleteTodo('${todo._id}')">
+                        Delete
+                    </button>
+                    </li>`
+            })
+            tdul.innerHTML=ntds;
+        }
+        const deleteTodo=(id)=>{
+            fetch(`/delete-todo/${id}`)
+            .then((res)=>{
+                if(res.ok)
+                {
+                    fetchTodos()
+                    alert("Todo deleted!")
+                }
+                else
+                    alert("Deletion failed!")
+        })
+        }
+        fetchTodos();
+    </script>
+</body>
+</html>
