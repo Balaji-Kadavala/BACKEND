@@ -6,7 +6,7 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="/submit/todo" method="post">
+    <form action="todos/submit" method="post">
         <input type="text" id="title" name="title" placeholder="Enter todo title">
         <button type="submit">Add Todo</button>
     </form>
@@ -34,7 +34,7 @@
             tdul.innerHTML=ntds;
         }
         const deleteTodo=(id)=>{
-            fetch(`/delete-todo/${id}`)
+            fetch(`todos/delete-todo/${id}`)
             .then((res)=>{
                 if(res.ok)
                 {
