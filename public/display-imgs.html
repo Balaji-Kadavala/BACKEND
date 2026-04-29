@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="container">
+
+    </div>
+    <script>
+        const cont=document.getElementById("container");
+        let ui="";
+        fetch("http://localhost:2244/file/allFiles")
+        .then(res=>res.json())
+        .then((images)=>{
+            console.log(images)
+            images.map((image)=>{
+                ui+= `<img src="${image.fileName}" style="width:200px;height:200px;padding:5px;">`
+            })
+            cont.innerHTML=ui;
+        })
+    </script>
+</body>
+</html>
