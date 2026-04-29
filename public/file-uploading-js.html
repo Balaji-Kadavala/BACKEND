@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h3>Please upload your profile image...</h3>
+    <form onsubmit="handleSubmit(event)">
+        <input type="file" name="profile"><br><br>
+        <input type="submit" value="submit">
+    </form>
+    <script>
+        const handleSubmit=(ev)=>{
+            ev.preventDefault();
+            const file=ev.target.profile.files[0];
+            console.dir(file)
+            const formData = new FormData();
+            formData.append("profile",file);
+            fetch("http://localhost:2244/file/upload",{
+                method:"POST",
+                body:formData
+            }).then(res=>res.json())
+            .then(data=>console.log(data))
+        }
+    </script>
+</body>
+</html>

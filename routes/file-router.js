@@ -21,7 +21,7 @@ router.post("/upload",upload.single('profile'),(req,res)=>{
     })
     newFileUpload.save();
     console.log(req.file)
-    res.send("Image uploaded!")
+    res.send({msg:"Image uploaded!"})
 })
 
 router.get("/allFiles",(req,res)=>{
