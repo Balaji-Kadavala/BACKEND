@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-
+const cors = require("cors")
 const connectDB = require("./db");
 
 const FileRouter = require("./routes/file-router")
@@ -10,6 +10,8 @@ dotenv.config();
 
 const dns = require("dns");
 dns.setServers(["1.1.1.1", "8.8.8.8"]);
+
+app.use(cors());
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json())
