@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <form onsubmit="handleLogin(event)">
+        <input type="text" name="username" placeholder="Username"><br>
+        <input type="password" name="password" placeholder="Password"><br>
+        <button type="submit" value="Login">Login</button>
+    </form>
+    <a href="/register.html">Don't have an account? Register here.</a>
+    <script>
+        window.localStorage.removeItem("token");
+        const handleLogin = (ev) => {
+            ev.preventDefault();
+            fetch("/login-req", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: ev.target.username.value,
+                    password: ev.target.password.value
+                })
+            })
+                .then(res => res.json())
+                .then((data) => {
+                    if (data.status == "success") {
+                        window.localStorage.setItem("token", data.token)
+                        fetch("/profile",{
+                            method:"GET",
+                            headers:{
+                                "token":window.localStorage.getItem("token")
+                            }
+                        })
+                       
+                        // window.location.href="/profile";
+                    }
+                    else {
+                        alert("Login failed!.. Invalid credentials")
+                    }
+                })
+        }
+    </script>
+</body>
+
+</html>

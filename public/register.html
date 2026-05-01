@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form onsubmit="registerUser(event)">
+        <input type="text" name="username" placeholder="Username"><br>
+        <input type="password" name="password" placeholder="Password"><br>
+        <button type="submit" value="Register">Register</button>
+    </form>
+    <a href="/login.html">Already have an account? Login here.</a><br>
+    <b id="status"></b>
+    <script>
+        function registerUser(ev) {
+            ev.preventDefault();
+            const username = document.querySelector('input[name="username"]').value;
+            const password = document.querySelector('input[name="password"]').value;
+
+            fetch('/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            })
+            .then(response => response.json())
+            .then(data =>{
+                if(data.status === 'success') {
+                    console.log("status",data.status)
+                    document.getElementById('status').innerText = 'Registration successful!';
+                    window.location.href = "/login";
+                } else {
+                    document.getElementById('status').innerText = 'User already exists.';
+                }
+                console.log('Success:', data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred during registration.');
+            });
+        }
+        </script>
+</body>
+</html>
