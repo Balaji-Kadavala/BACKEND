@@ -2,9 +2,10 @@ const router = require("express").Router();
 const path = require("path")
 const multer  = require('multer');
 const FileModel = require("../model/file-model");
+const { uploadFile, getAllFilesData } = require("../controllers/file-controller");
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.join(__dirname,'../uploads'))
+    cb(null, './uploads/')
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
@@ -14,18 +15,8 @@ const storage = multer.diskStorage({
 })
 const upload = multer({ storage })
 
-router.post("/upload",upload.single('profile'),(req,res)=>{
-    const newFileUpload = new FileModel({
-        imageUrl : req.file.path,
-        fileName : req.file.filename
-    })
-    newFileUpload.save();
-    console.log(req.file)
-    res.send({msg:"Image uploaded!"})
-})
+router.post("/upload",upload.single('profile'),uploadFile)
 
-router.get("/allFiles",(req,res)=>{
-    const allFiles = FileModel.find().then((data)=>res.send(data))
-})
+router.get("/allFiles",getAllFilesData)
 
 module.exports = router;
