@@ -18,7 +18,7 @@
             console.dir(file)
             const formData = new FormData();
             formData.append("profile",file);
-            fetch("http://localhost:2244/file/upload",{
+            fetch("/file/upload",{         //http://localhost:2244/file/upload  use this if it is local
                 method:"POST",
                 body:formData
             }).then(res=>res.json())
