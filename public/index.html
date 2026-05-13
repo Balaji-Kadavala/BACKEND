@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="socket.io.min.js"></script>
+</head>
+
+<body>
+    <h1>Hello, <span id="name"></span></h1>
+    <input type="text" placeholder="Enter message!" id="inp">
+    <button onclick="broadcastMsg()">Send</button>
+    <h2>Live Users:<span id="cnt"></span></h2>
+    <ul id="liveUsers">
+
+    </ul>
+    <h4>Message:<span id="msg">No MSG</span></h4><br>
+    <h6>Last:<i id="userstatus"></i></h6>
+    <script>
+        const username = prompt("Say your name:").toUpperCase();
+        console.log("username:", username)
+        const socket = io({
+            "auth": {
+                username
+            }
+        });
+        document.getElementById("name").innerText = username.toUpperCase();
+        socket.on("connect", () => {
+            console.log(socket.id)
+        })
+        socket.on("userJoinData", (user) => {
+            document.getElementById("cnt").innerText = user.liveCount;
+            document.getElementById("userstatus").innerText = (user.username === username ? "You" : user.username.toUpperCase()) + " joined!";
+            renderLiveUsers(user.liveUsers);
+        })
+        socket.on("userLeftData", (user) => {
+            document.getElementById("cnt").innerText = user.liveCount;
+            document.getElementById("userstatus").innerText = user.username.toUpperCase() + " left!";
+            renderLiveUsers(user.liveUsers)
+        })
+        socket.on("userMsg", (data) => {
+            if (data.username == username)
+                document.getElementById("msg").innerText = "Msg sent!";
+            else
+                document.getElementById("msg").innerText = `${data.msg}  (${data.username})`
+        })
+        function renderLiveUsers(liveUsers) {
+            let ul = document.getElementById("liveUsers")
+            ul.innerHTML = "";
+            let usersLis = "";
+            liveUsers.forEach((username) => {
+                usersLis += `<li>${username}</li>`;
+                console.log(username);
+            })
+            ul.innerHTML = usersLis;
+            console.log(liveUsers)
+        }
+        function broadcastMsg() {
+            socket.emit("sendMsg", { msg: document.getElementById("inp").value })
+            document.getElementById("inp").value="";
+        }
+    </script>
+</body>
+
+</html>
